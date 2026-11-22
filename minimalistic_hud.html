@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUD-01 // Cybernetic Operations Terminal</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --text-color: #e0e0e0;
+            --accent-color: #00ff66;
+            --border-color: #222222;
+            --dim-color: #555555;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem;
+        }
+
+        /* Фоновые линии сетки */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Хэдер */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .sys-status {
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-color);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+
+        .sys-id {
+            color: var(--dim-color);
+        }
+
+        /* Основной контент */
+        main {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            margin: auto 0;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        .hero-content p {
+            color: var(--dim-color);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+
+        /* HUD Панель Метрик */
+        .hud-panel {
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            position: relative;
+            background: rgba(15, 15, 15, 0.6);
+        }
+
+        /* Угловые рамки HUD */
+        .hud-panel::before, .hud-panel::after {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-color: var(--accent-color);
+            border-style: solid;
+        }
+        .hud-panel::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+        .hud-panel::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px dashed var(--border-color);
+            font-size: 0.85rem;
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: var(--dim-color);
+        }
+
+        .metric-value {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Футер / Кнопки управления */
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+            font-size: 0.8rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: inherit;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            padding-bottom: 2px;
+            transition: color 0.2s;
+        }
+
+        .control-btn:hover {
+            color: var(--accent-color);
+        }
+
+        .control-btn::after {
+            content: "";
+            position: absolute;
+            bottom: 0; left: 0; width: 0; height: 1px;
+            background-color: var(--accent-color);
+            transition: width 0.3s;
+        }
+
+        .control-btn:hover::after {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Шапка с системным тикером -->
+    <header>
+        <div class="sys-status">
+            <div class="pulse-dot"></div>
+            <span>SYS.ONLINE // PING: 12ms</span>
+        </div>
+        <div class="sys-id">WA_STUDIO // CASE_01</div>
+    </header>
+
+    <!-- Главная секция -->
+    <main>
+        <div class="hero-content">
+            <h1>Минималистичный HUD Аналитики</h1>
+            <p>Интерфейс кибернетического терминала обработки данных. Высокопроизводительные потоки метрик, отсутствие лишнего шума, строгая геометрия и мгновенный отклик.</p>
+        </div>
+
+        <!-- HUD Виджет с метриками -->
+        <div class="hud-panel">
+            <div class="metric-row">
+                <span class="metric-label">CPU_LOAD</span>
+                <span class="metric-value">14.2%</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">ACTIVE_NODES</span>
+                <span class="metric-value">72 / 72</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">STREAM_FLOW</span>
+                <span class="metric-value">1.24 GB/s</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">SECURITY_STATE</span>
+                <span class="metric-value">SECURE</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- Нижняя панель с переключателями -->
+    <footer>
+        <div class="controls">
+            <button class="control-btn" onclick="alert('Переключение режима: RAW')">[ RAW_MODE ]</button>
+            <button class="control-btn" onclick="alert('Переключение режима: MATRIX')">[ MATRIX_GRID ]</button>
+            <button class="control-btn" onclick="alert('Сканирование системы запущено')">[ SCAN_SYS ]</button>
+        </div>
+        <div class="copyright">w3bAttacking © 2026</div>
+    </footer>
+
+</body>
+</html>
